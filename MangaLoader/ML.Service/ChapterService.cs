@@ -113,13 +113,8 @@ namespace ML.Service
                 var html = await response.Content.ReadAsStringAsync();
 
                 var regex = new Regex(@"(?=chapter-item""\s+?(?=data-id.{2}(?<="")([\s\S]+?)(?="")))");
-                var ids = regex.Matches(html);
                 var chaptersId = new List<string>();
-
-                for (int i = 0; i < ids.Count; i++)
-                {
-                    chaptersId.Add(ids[i].Groups[1].Value);
-                }
+                regex.Matches(html).ToList().ForEach(x => chaptersId.Add(x.Groups[1].Value));
 
                 return chaptersId;
             }
