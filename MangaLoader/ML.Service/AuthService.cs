@@ -60,9 +60,9 @@ namespace ML.Service
         private void CheckAuthorization(HttpResponseMessage response)
         {
             if (response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value.ToList().Count != 3)
-                throw new Exception("Ошибка авторизации");
+                throw new Exception("Authorization error");
 
-            Console.WriteLine("Авторизация прошла успешно");
+            Console.WriteLine("Authorization was successful");
         }
 
         /// <summary>
