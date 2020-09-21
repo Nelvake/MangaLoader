@@ -72,9 +72,8 @@ namespace ML.Service
         {
             Parallel.ForEach(chapters, new ParallelOptions { MaxDegreeOfParallelism = 10 }, chapter => 
             {
-                Console.WriteLine($"Volume {chapter.ChapterInfo.Volume}. Chapter {chapter.ChapterInfo.Number} - start download");
                 DownloadChapter(chapter);
-                Console.WriteLine($"Volume {chapter.ChapterInfo.Volume}. Chapter {chapter.ChapterInfo.Number} - start success");
+                Console.WriteLine($"Volume {chapter.ChapterInfo.Volume}. Chapter {chapter.ChapterInfo.Number} | Download success");
             });
 
             return true;
