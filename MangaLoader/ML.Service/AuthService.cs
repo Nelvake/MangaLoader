@@ -47,8 +47,22 @@ namespace ML.Service
                 cookieContainer.Add(url, Cookies);
                 var response = await client.PostAsync(url, content);
 
+                CheckAuthorization(response);
+
                 return response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value.ToList();
             }
+        }
+
+        /// <summary>
+        /// Проверка авторизации
+        /// </summary>
+        /// <param name="response">Ответ от сервера</param>
+        private void CheckAuthorization(HttpResponseMessage response)
+        {
+            if (response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value.ToList().Count != 3)
+                throw new Exception("Ошибка авторизации");
+
+            Console.WriteLine("Авторизация прошла успешно");
         }
 
         /// <summary>
