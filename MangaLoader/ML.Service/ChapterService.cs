@@ -26,6 +26,11 @@ namespace ML.Service
             Domain = "img4.imgslib.ru";
         }
 
+        /// <summary>
+        /// Получение информации о главе
+        /// </summary>
+        /// <param name="chapterId">Номер главы</param>
+        /// <returns></returns>
         public async Task<Chapter> GetChapterInfo(string chapterId)
         {
             var request = WebRequest.Create($"{_baseUrl}download/{chapterId}");
@@ -36,6 +41,11 @@ namespace ML.Service
             }
         }
 
+        /// <summary>
+        /// Получение информации о нескольких главах
+        /// </summary>
+        /// <param name="chaptersId">Список номеров глав</param>
+        /// <returns></returns>
         public async Task<List<Chapter>> GetChaptersInfo(List<string> chaptersId)
         {
             var chaptersInfo = new List<Chapter>();
@@ -47,6 +57,11 @@ namespace ML.Service
             return chaptersInfo.OrderBy(x => x.ChapterInfo.Volume).ThenBy(y => y.ChapterInfo.Number).ToList();
         }
 
+        /// <summary>
+        /// Загрузка одной главы
+        /// </summary>
+        /// <param name="chapter">Глава</param>
+        /// <returns></returns>
         public bool DownloadChapter(Chapter chapter)
         {
             var downloadUrl = string.Empty;
@@ -68,6 +83,11 @@ namespace ML.Service
             return true;
         }
 
+        /// <summary>
+        /// Загрузка нескольких глав
+        /// </summary>
+        /// <param name="chapters"></param>
+        /// <returns></returns>
         public bool DownloadChapters(List<Chapter> chapters)
         {
             Parallel.ForEach(chapters, new ParallelOptions { MaxDegreeOfParallelism = 10 }, chapter => 
@@ -79,6 +99,11 @@ namespace ML.Service
             return true;
         }
 
+        /// <summary>
+        /// Получает номера глав по ссылке
+        /// </summary>
+        /// <param name="url">Ссылка на мангу</param>
+        /// <returns></returns>
         public async Task<List<string>> GetChaptersId(string url)
         {
             SetMangaName(url);
@@ -100,6 +125,10 @@ namespace ML.Service
             }
         }
 
+        /// <summary>
+        /// Инициализирует название манги по ссылке
+        /// </summary>
+        /// <param name="url">Ссылка на мангу</param>
         private void SetMangaName(string url)
         {
             var regex = new Regex(@"(?<=me\/).*");
