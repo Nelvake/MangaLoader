@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ML.Domain\ML.Domain.csproj" />
+    <ProjectReference Include="..\ML.Service.Interfaces\ML.Service.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>
