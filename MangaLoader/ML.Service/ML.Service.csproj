@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ML.Domain\ML.Domain.csproj" />
     <ProjectReference Include="..\ML.Service.Interfaces\ML.Service.Interfaces.csproj" />
   </ItemGroup>
