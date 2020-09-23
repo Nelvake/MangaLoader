@@ -90,10 +90,13 @@ namespace ML.Service
         /// <returns></returns>
         public bool DownloadChapters(List<Chapter> chapters)
         {
-            Parallel.ForEach(chapters, new ParallelOptions { MaxDegreeOfParallelism = 10 }, chapter => 
+            Parallel.ForEach(chapters, new ParallelOptions { MaxDegreeOfParallelism = 15 }, chapter => 
             {
                 DownloadChapter(chapter);
-                Console.WriteLine($"Volume {chapter.ChapterInfo.Volume}. Chapter {chapter.ChapterInfo.Number} | Download success");
+                Console.Write($" - Volume {chapter.ChapterInfo.Volume}. Chapter {chapter.ChapterInfo.Number}\t");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(" | Download success");
+                Console.ResetColor();
             });
 
             return true;
