@@ -64,23 +64,33 @@ namespace ML.Service
         /// <returns></returns>
         public bool DownloadChapter(Chapter chapter)
         {
-            var downloadUrl = string.Empty;
-            var path = $@"{MangaName}\{chapter.ChapterInfo.Volume} volume\{chapter.ChapterInfo.Number} chapter";
-            if (!Directory.Exists(MangaName)) Directory.CreateDirectory(MangaName);
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-
-            using (WebClient client = new WebClient())
+            try
             {
-                foreach (var image in chapter.Images)
-                {
-                    downloadUrl = $"https://{Domain}/manga/{MangaName}/chapters/{chapter.ChapterInfo.Slug}/{image}";
+                var downloadUrl = string.Empty;
+                var path = $@"{MangaName}\{chapter.ChapterInfo.Volume} volume\{chapter?.ChapterInfo.Number} chapter";
+                if (!Directory.Exists(MangaName)) Directory.CreateDirectory(MangaName);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
 
-                    client.DownloadFile(new Uri(downloadUrl), @$"{path}\{image}");
+                using (WebClient client = new WebClient())
+                {
+                    foreach (var image in chapter.Images)
+                    {
+                        downloadUrl = $"https://{Domain}/manga/{MangaName}/chapters/{chapter.ChapterInfo.Slug}/{image}";
+
+                        client.DownloadFile(new Uri(downloadUrl), @$"{path}\{image}");
+                    }
+                    return true;
                 }
             }
-
-            return true;
+            catch (WebException)
+            {
+                return false;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         /// <summary>
@@ -90,16 +100,40 @@ namespace ML.Service
         /// <returns></returns>
         public bool DownloadChapters(List<Chapter> chapters)
         {
-            Parallel.ForEach(chapters, new ParallelOptions { MaxDegreeOfParallelism = 15 }, chapter => 
+            try
             {
-                DownloadChapter(chapter);
-                Console.Write($" - Volume {chapter.ChapterInfo.Volume}. Chapter {chapter.ChapterInfo.Number}\t");
+                Parallel.ForEach(chapters, new ParallelOptions { MaxDegreeOfParallelism = 15 }, chapter =>
+                {
+                    ShowDownloadStatus(chapter, DownloadChapter(chapter));
+                });
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Отображение в консоли статус загрузки
+        /// </summary>
+        /// <param name="chapter">Скачиваемая глава</param>
+        /// <param name="status">Статус загрузки</param>
+        private void ShowDownloadStatus(Chapter chapter, bool status)
+        {
+            Console.Write($" - Volume {chapter.ChapterInfo.Volume}. Chapter {chapter.ChapterInfo.Number}\t");
+            if (status)
+            {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(" | Download success");
-                Console.ResetColor();
-            });
-
-            return true;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" | Download error");
+            }
+            Console.ResetColor();
         }
 
         /// <summary>
