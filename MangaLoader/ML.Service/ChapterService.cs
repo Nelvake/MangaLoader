@@ -1,4 +1,5 @@
 ﻿using ML.Domain;
+using ML.Service.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ML.Service
 {
-    public class ChapterService
+    public class ChapterService : ILib
     {
         private readonly string _baseUrl;
         private List<string> Cookies { get; set; }

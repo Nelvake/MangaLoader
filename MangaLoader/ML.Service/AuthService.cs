@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ML.Service.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ML.Service
 {
-    public class AuthService
+    public class AuthService : IAuth
     {
         private string AuthToken { get; set; }
         private CookieCollection Cookies { get; set; }
